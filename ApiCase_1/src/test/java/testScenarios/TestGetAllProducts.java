@@ -1,6 +1,8 @@
 package testScenarios;
 
 import framework.Requests;
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import model.Root;
 import org.testng.Assert;
@@ -15,8 +17,10 @@ public class TestGetAllProducts {
         requests = new Requests();
     }
 
+    @Step("Get all product")
+    @Description("This test is getting all products in market and verify")
     @Test
-    public void verifyGetAllProducts(){
+    public void verifySuccessfulGetAllProducts(){
         Response response = requests.getAllProducts();
         Root allProducts = response.getBody().as(Root.class);
 

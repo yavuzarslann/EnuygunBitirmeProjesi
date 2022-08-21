@@ -1,6 +1,8 @@
 package testScenarios;
 
 import framework.Requests;
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
 import model.Pets;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -14,6 +16,8 @@ public class FindPetsByID {
         requests = new Requests();
     }
 
+    @Step("Get pet by id")
+    @Description("This test is getting the third pet from available pets and verify")
     @Test
     public void verifyGetPetById(){
         String id = requests.getAvailablePets()[2].getId();

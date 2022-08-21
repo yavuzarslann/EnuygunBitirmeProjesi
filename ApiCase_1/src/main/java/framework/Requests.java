@@ -6,7 +6,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import model.Product;
-import model.Root;
+
 
 import static io.restassured.RestAssured.given;
 
@@ -55,6 +55,28 @@ public class Requests {
                 .post(Endpoints.ADD_PRODUCT)
                 .then()
                 .statusCode(200)
+                .contentType(ContentType.JSON)
+                .extract().response();
+        return response;
+    }
+
+    public Response getProductByNameInvalidUrl(String name){
+        this.response = given()
+                .header("Content-Type", "application/json")
+                .pathParam("name", name)
+                .get(Endpoints.INVALID_URL)
+                .then()
+                .extract().response();
+        return response;
+    }
+
+    public Response addProductInvalid(){
+        response = given()
+                .header("Content-Type", "application/json")
+                .body("")
+                .when()
+                .post(Endpoints.ADD_PRODUCT)
+                .then()
                 .contentType(ContentType.JSON)
                 .extract().response();
         return response;

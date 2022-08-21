@@ -1,6 +1,8 @@
 package testScenarios;
 
 import framework.Requests;
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
 import model.Pets;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -14,6 +16,8 @@ public class FindPetsByStatus {
         requests = new Requests();
     }
 
+    @Step("Get available status pets")
+    @Description("This test is getting available pets and verify")
     @Test(priority = 0)
     public void verifyGetAvailablePets() {
         Pets[] petsAvailable = requests.getAvailablePets();
@@ -22,6 +26,8 @@ public class FindPetsByStatus {
         Assert.assertEquals(petsAvailable[0].getStatus(), "available", "Status is correct");
     }
 
+    @Step("Get pending status pets")
+    @Description("This test is getting pending pets and verify")
     @Test(priority = 1)
     public void verifyGetPendingPets() {
         Pets[] petsPending = requests.getPendingPets();
@@ -30,6 +36,9 @@ public class FindPetsByStatus {
         Assert.assertEquals(petsPending[0].getStatus(), "pending", "Status is correct");
     }
 
+
+    @Step("Get sold pets status")
+    @Description("This test is getting sold pets and verify")
     @Test(priority = 1)
     public void verifyGetSoldPets() {
         Pets[] petsSold = requests.getSoldPets();

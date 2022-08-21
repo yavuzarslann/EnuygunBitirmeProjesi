@@ -1,6 +1,8 @@
 package testScenarios;
 
 import framework.Requests;
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import model.Pets;
@@ -16,6 +18,8 @@ public class UpdatePetInStore {
         requests = new Requests();
     }
 
+    @Step("Update a pet in the store with form data")
+    @Description("This test is updating a pet posting parameters and verify")
     @Test
     public void verifyUpdatePetInStore() {
         Response response = requests.updatePetInStore();
