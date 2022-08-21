@@ -13,19 +13,19 @@ public class FlightTicketPage extends DriverSetup {
     List<WebElement> selectedFlightList;
 
     By originInput = By.id("OriginInput");
-    By clickOrigin = By.id("react-autowhatever-OriginInput-section-0-item-0");
+    By firstOriginCity = By.id("react-autowhatever-OriginInput-section-0-item-0");
     By destinationInput = By.id("DestinationInput");
-    By clickDestination = By.id("react-autowhatever-DestinationInput-section-0-item-0");
+    By firstDestinationCity = By.id("react-autowhatever-DestinationInput-section-0-item-0");
     By departureDay = By.id("DepartureDate");
     By returnDay = By.id("ReturnDate");
     By dateEnabled = By.xpath("//td[@aria-disabled='false']");
     By nextMonthBtn = By.xpath("//*[@aria-label='Move forward to switch to the next month.']");
     By findTicket = By.xpath("//button[@class='primary-btn block']");
     By transitFilter = By.id("transitFilter");
-    By provider = By.xpath("//div[contains(@class,'flight-list-body')]/div/div/div/div/div/label/div[2][@data-booking-provider='sabre-pegasus']");
-    By selectFlightBtn = By.xpath("//button[@id='tooltipTarget_0']");
     By selectFlightBtn2 = By.cssSelector("#tooltipTarget_0");
     By selectedFlights = By.xpath("//*[@class='flight-item round-trip tr  active']");
+    By selectFlightPage = By.xpath("//span[contains(text(),'Gidiş Uçuşları')]");
+    By giveInfoField = By.xpath("//span[normalize-space()='Bilgilerini Gir']");
 
     public void enterOrigin(String origin) {
         DriverSetup.driver.findElement(originInput).click();
@@ -33,11 +33,11 @@ public class FlightTicketPage extends DriverSetup {
     }
 
     public void selectOrigin() {
-        DriverSetup.driver.findElement(clickOrigin).click();
+        DriverSetup.driver.findElement(firstOriginCity).click();
     }
 
     public boolean isDisplayedOriginCity() {
-        return DriverSetup.driver.findElement(clickOrigin).isDisplayed();
+        return DriverSetup.driver.findElement(firstOriginCity).isDisplayed();
     }
 
     public String selectedOrigin() {
@@ -52,11 +52,11 @@ public class FlightTicketPage extends DriverSetup {
     }
 
     public boolean isDisplayedDestinationCity() {
-        return DriverSetup.driver.findElement(clickDestination).isDisplayed();
+        return DriverSetup.driver.findElement(firstDestinationCity).isDisplayed();
     }
 
     public void selectDestination() {
-        DriverSetup.driver.findElement(clickDestination).click();
+        DriverSetup.driver.findElement(firstDestinationCity).click();
     }
 
     public String selectedDestination() {
@@ -85,46 +85,40 @@ public class FlightTicketPage extends DriverSetup {
         //this is the list that lists enable to select dates from date picker
         List<WebElement> allDates = DriverSetup.driver.findElements(dateEnabled);
 
-        while (true) {
-            if (daysAfterToday == 1) {
-                break;
-            } else {
-                String date = allDates.get(daysAfterToday).getAttribute("aria-label");
-                String dateArr[] = date.split(" ");
+        if (daysAfterToday == 1) {
+            DriverSetup.driver.findElement(By.xpath("//td[@aria-label='" + allDates.get(daysAfterToday).getAttribute("aria-label") + "']")).click();
+        } else {
+            String date = allDates.get(daysAfterToday).getAttribute("aria-label");
+            String dateArr[] = date.split(" ");
 
-                boolean month = DriverSetup.driver.findElement(By.xpath("//strong[contains(text(),'" + dateArr[2] + " 2022')]")).isDisplayed();
-                if (month) {
-                    break;
-                } else {
-                    DriverSetup.driver.findElement(nextMonthBtn).click();
-                }
+            boolean month = DriverSetup.driver.findElement(By.xpath("//strong[contains(text(),'" + dateArr[2] + " 2022')]")).isDisplayed();
+            if (month) {
+                DriverSetup.driver.findElement(By.xpath("//td[@aria-label='" + allDates.get(daysAfterToday).getAttribute("aria-label") + "']")).click();
+            } else {
+                DriverSetup.driver.findElement(nextMonthBtn).click();
             }
         }
-
-        DriverSetup.driver.findElement(By.xpath("//td[@aria-label='" + allDates.get(daysAfterToday).getAttribute("aria-label") + "']")).click();
-
     }
 
     public void selectReturnDate(int daysAfterDeparture) {
+        //List that getting all enabled date
         List<WebElement> allDates = DriverSetup.driver.findElements(dateEnabled);
 
-        while (true) {
-            if (daysAfterDeparture == 1) {
-                break;
-            } else {
-                String date = allDates.get(daysAfterDeparture).getAttribute("aria-label");
-                String dateArr[] = date.split(" ");
+        //There is condition because default selected date is already day after today
+        //This algorithm put the parameter to enabled day locator so wanted date can be selected
+        if (daysAfterDeparture == 1) {
+            DriverSetup.driver.findElement(By.xpath("//td[@aria-label='" + allDates.get(daysAfterDeparture).getAttribute("aria-label") + "']")).click();
+        } else {
+            String date = allDates.get(daysAfterDeparture).getAttribute("aria-label");
+            String dateArr[] = date.split(" ");
 
-                boolean month = DriverSetup.driver.findElement(By.xpath("//strong[contains(text(),'" + dateArr[2] + " 2022')]")).isDisplayed();
-                if (month) {
-                    break;
-                } else {
-                    DriverSetup.driver.findElement(nextMonthBtn).click();
-                }
+            boolean month = DriverSetup.driver.findElement(By.xpath("//strong[contains(text(),'" + dateArr[2] + " 2022')]")).isDisplayed();
+            if (month) {
+                DriverSetup.driver.findElement(By.xpath("//td[@aria-label='" + allDates.get(daysAfterDeparture).getAttribute("aria-label") + "']")).click();
+            } else {
+                DriverSetup.driver.findElement(nextMonthBtn).click();
             }
         }
-
-        DriverSetup.driver.findElement(By.xpath("//td[@aria-label='" + allDates.get(daysAfterDeparture).getAttribute("aria-label") + "']")).click();
     }
 
     public void selectDirectFlight(boolean isDirect) {
@@ -141,10 +135,17 @@ public class FlightTicketPage extends DriverSetup {
         DriverSetup.driver.findElement(findTicket).click();
     }
 
+    public boolean isDisplayedSelectFlightPage(){
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(selectFlightPage)));
+        return driver.findElement(selectFlightPage).isDisplayed();
+    }
+
     public List<WebElement> selectProvider(String provider) {
         List<WebElement> webElementList = new ArrayList();
 
         webElementList = driver.findElements(By.xpath("//div[contains(@class,'flight-list-body')]/div/div/div/div/div/label/div[2][@data-booking-provider='" + provider + "']"));
+
         return webElementList;
     }
 
@@ -157,12 +158,6 @@ public class FlightTicketPage extends DriverSetup {
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Please give a valid provider as parameter");
         }
-
-        /*WebElement wait = new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(selectProvider(provider).get(0)));
-
-        wait.click();*/
-        //selectProvider(provider).get(0).click();
-        //webElementList.get(0).click();
     }
 
     public String getSelectedDepartureFlightProvider() {
@@ -171,9 +166,14 @@ public class FlightTicketPage extends DriverSetup {
     }
 
     public void selectReturnFlight(String provider) {
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.elementToBeClickable(selectProvider(provider).get(1)));
-        selectProvider(provider).get(1).click();
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, 10);
+            wait.until(ExpectedConditions.elementToBeClickable(selectProvider(provider).get(1)));
+            selectProvider(provider).get(1).click();
+        }catch(IndexOutOfBoundsException e){
+            System.out.println("Please give a valid provider as parameter");
+        }
+
     }
 
     public String getSelectedReturnFlightProvider() {
@@ -183,5 +183,9 @@ public class FlightTicketPage extends DriverSetup {
 
     public void selectFlight() {
         DriverSetup.driver.findElement(selectFlightBtn2).click();
+    }
+
+    public boolean isDisplayedNextPage(){
+        return driver.findElement(giveInfoField).isDisplayed();
     }
 }

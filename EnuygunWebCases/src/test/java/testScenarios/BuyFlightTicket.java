@@ -20,8 +20,8 @@ public class BuyFlightTicket extends DriverSetup {
     String destination = "Amsterdam";
     int departureDay = 2;
     int returnDay = 10;
-    boolean isDirect = false;
-    String provider = "galileo-pegasus";
+    boolean isDirect = true;
+    String provider = "galileo-sabre";
 
     @BeforeClass
     public void setup() {
@@ -87,6 +87,8 @@ public class BuyFlightTicket extends DriverSetup {
     @Test(priority = 5, description = "Verify successfully click find ticket")
     public void verifyFindTicketButton(){
         flightTicketPage.clickFindTicket();
+
+        Assert.assertTrue(flightTicketPage.isDisplayedSelectFlightPage());
     }
 
     @Test(priority = 6, description = "Verify successfully selecting departure flight")
@@ -110,6 +112,8 @@ public class BuyFlightTicket extends DriverSetup {
     @Test(priority = 8, description = "Verify successfully clicking select button")
     public void verifySelectButton(){
         flightTicketPage.selectFlight();
+
+        Assert.assertTrue(flightTicketPage.isDisplayedNextPage());
     }
 
 }
