@@ -12,7 +12,6 @@ import java.util.List;
 public class FlightTicketPage extends DriverSetup {
     List<WebElement> selectedFlightList;
 
-    By cookieAlert = By.xpath("//*[@id='CookieAlert']//button");
     By originInput = By.id("OriginInput");
     By clickOrigin = By.id("react-autowhatever-OriginInput-section-0-item-0");
     By destinationInput = By.id("DestinationInput");
@@ -27,10 +26,6 @@ public class FlightTicketPage extends DriverSetup {
     By selectFlightBtn = By.xpath("//button[@id='tooltipTarget_0']");
     By selectFlightBtn2 = By.cssSelector("#tooltipTarget_0");
     By selectedFlights = By.xpath("//*[@class='flight-item round-trip tr  active']");
-
-    public void closeCookieAlert() {
-        DriverSetup.driver.findElement(cookieAlert).click();
-    }
 
     public void enterOrigin(String origin) {
         DriverSetup.driver.findElement(originInput).click();
@@ -155,11 +150,11 @@ public class FlightTicketPage extends DriverSetup {
 
     public void selectDepartureFlight(String provider) {
 
-        try{
+        try {
             WebDriverWait wait = new WebDriverWait(driver, 10);
             wait.until(ExpectedConditions.elementToBeClickable(selectProvider(provider).get(0)));
             selectProvider(provider).get(0).click();
-        }catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             System.out.println("Please give a valid provider as parameter");
         }
 

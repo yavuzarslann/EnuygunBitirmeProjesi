@@ -7,12 +7,14 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import pages.FlightTicketPage;
+import pages.HomePage;
 import utilities.DriverSetup;
 
 
 @Slf4j
 @Listeners({Listener.class})
 public class BuyFlightTicket extends DriverSetup {
+    HomePage homePage;
     FlightTicketPage flightTicketPage;
     String origin = "İstanbul";
     String destination = "Amsterdam";
@@ -24,9 +26,10 @@ public class BuyFlightTicket extends DriverSetup {
     @BeforeClass
     public void setup() {
         initializeDriver();
+        homePage = new HomePage();
         flightTicketPage = new FlightTicketPage();
 
-        flightTicketPage.closeCookieAlert();
+        homePage.closeCookieAlert();
     }
 
     @Test(description = "Verify successfully selecting origin")
@@ -108,38 +111,5 @@ public class BuyFlightTicket extends DriverSetup {
     public void verifySelectButton(){
         flightTicketPage.selectFlight();
     }
-
-
-    /*@Test(description = "Verify successfully buying flight ticket")
-    public void verifySuccessfulBuyFlightTicket(){
-        flightTicketPage.enterOrigin(origin);
-        flightTicketPage.selectOrigin();
-        String selectedOrigin = flightTicketPage.selectedOrigin();
-
-        Assert.assertEquals(selectedOrigin,origin,"Selected origin is verified");
-
-        flightTicketPage.enterDestination(destination);
-        flightTicketPage.selectDestination();
-        String selectedDestination = flightTicketPage.selectedDestination();
-
-        Assert.assertEquals(selectedDestination,destination,"Selected destination is verified");
-
-        flightTicketPage.clickDepartureDay();
-        flightTicketPage.selectDepartureDate(departureDay);
-
-        flightTicketPage.clickReturnDay();
-        flightTicketPage.selectReturnDate(returnDay);
-
-        flightTicketPage.selectDirectFlight(isDirect);
-
-        flightTicketPage.clickFindTicket();
-
-        flightTicketPage.selectDepartureFlight(provider);
-
-        flightTicketPage.selectReturnFlight(provider);
-
-        flightTicketPage.selectFlight();
-
-    }*/
 
 }
